@@ -2,7 +2,7 @@
 
 int Module::load(char* path) {
     long size;
-    FILE* infile = fopen(path, "r");
+    FILE* infile = fopen(path, "rb");
     if (infile == nullptr) {
         perror("fopen");
         return -1;
