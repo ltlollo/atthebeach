@@ -1,3 +1,6 @@
+#ifndef IOBUFFER_H
+#define IOBUFFER_H
+
 #include <strings.h>
 
 template<typename T, size_t N>
@@ -77,3 +80,5 @@ template<typename C, typename F>
 auto make_iobuffer(C, F f) noexcept {
     return IOBuffer<C, F, void>{f};
 }
+
+#endif // IOBUFFER_H
