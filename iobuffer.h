@@ -25,8 +25,8 @@ struct IOBuffer {
     IOBuffer(Cn c, Ds d) noexcept : cnstr{c}, destr{d} {
         bzero(storage, size*sizeof(type));
     }
-    auto group_cnstr() noexcept {
-        for (size_t i = 0; i < size; ++i) {
+    auto group_cnstr(const size_t pos = 0) noexcept {
+        for (size_t i = pos; i < size; ++i) {
             if ((err = cnstr(storage[i]))) {
                 return Err{ err, i };
             }
@@ -55,8 +55,8 @@ struct IOBuffer<Cfg, Cn, void> {
     int err;
     IOBuffer(Cn c) noexcept : cnstr{c} {
     }
-    auto group_cnstr() noexcept {
-        for (size_t i = 0; i < size; ++i) {
+    auto group_cnstr(const size_t pos = 0) noexcept {
+        for (size_t i = pos; i < size; ++i) {
             if ((err = cnstr(storage[i]))) {
                 return Err{ err, i };
             }
