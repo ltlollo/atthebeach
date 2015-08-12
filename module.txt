@@ -1,0 +1,40 @@
+module {
+fn offs:
+    foff0    : {dist f0 text  , 1}
+    ...
+    foffN
+    dynfoff0 : {dist dynf0 sig, 0}
+    ...
+    dynfoffK
+    NULL
+symbol offs:
+    soff0
+    ...
+    soffM
+    NULL
+fn main text (ends with return opcode)
+fn text:
+    fn0
+    ...
+    fnN
+symbol text:
+    symbol0
+    ...
+    symbolM
+}
+
+fn/symbol offs == 1 (impossible to have as smaller module has NULL, NULL) means
+patch at load time
+
+main is executed at module load time (or is the real main)
+
+
+fn off is 64bit,
+    { offset, 1b } => offset refers to the distance of a function text
+    { offset, 0b } => offset refers to the dinstance of a symbol of a function
+    signature
+
+at init {off, 1b} it's replaced by (module address)+off, that is the pointer to
+the function text
+at dynload {off, 0b} it's replaced by the address of the function, in another
+module.
