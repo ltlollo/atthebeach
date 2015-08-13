@@ -1,6 +1,32 @@
 #ifndef IOBUFFER_H
 #define IOBUFFER_H
 
+/* Scope
+ *
+ * Given a configuration parameter `Conf<type, size>`, a group constructor
+ * function, and an optional group destruction function, the `make_iobuffer`
+ * function provides a stack allocated buffer of `size` elements of `type`.
+ * Errors must be reported returing a non zero value in the group construtor;
+ * if they occur, contruction gets stopped at the current element; it's
+ * position gets returned with error (construction can be resumed via the first
+ * optional paramenter of the group_cnstr function).
+ * Group destruction must not fail; all exceptions are fatal.
+ * `init` and `cycle` methods are provided in order to create the fist and the
+ * next batch of elements, destructors are called and errors forwarded if any.
+ *
+ * Usage (code example)
+ *
+ * auto show = [](const auto& buf) { for (const auto& i: buf.storage) {
+ *     cout << i << '\n';
+ * }};
+ * int s = 0;
+ * auto buf = make_iobuffer(Conf<int, 1024>{}, [&](auto& val) { val = s++; });
+ * buf.init();
+ * show(buf);
+ * buf.cycle();
+ * show(buf);
+ */
+
 template<typename T, std::size_t N>
 struct Conf {
     using Type = T;
