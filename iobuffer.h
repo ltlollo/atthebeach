@@ -147,13 +147,13 @@ struct IOBuffer<Cfg, Cn, void, void> {
 };
 
 template<typename C, typename F, typename G>
-auto make_iobuffer(C, F f, G g) noexcept {
+constexpr auto make_iobuffer(C, F f, G g) noexcept {
     using Ret = decltype(f(std::declval<typename C::Type&>()));
     return IOBuffer<C, F, G, Ret>{f, g};
 }
 
 template<typename C, typename F>
-auto make_iobuffer(C, F f) noexcept {
+constexpr auto make_iobuffer(C, F f) noexcept {
     using Ret = decltype(f(std::declval<typename C::Type&>()));
     return IOBuffer<C, F, void, Ret>{f};
 }
