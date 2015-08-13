@@ -29,7 +29,7 @@ int Module::load(char* path) {
         goto ERR;
     }
     if (dsize < sizeof(int8_t)+2*sizeof(void*)+sizeof(Instr)) {
-        fprintf(stderr, "unsipported format");
+        fprintf(stderr, "unsupported format");
     }
     ver = *(uint8_t*)data++;
     return 0;

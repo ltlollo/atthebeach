@@ -10,7 +10,8 @@
  * if they occur, contruction gets stopped at the current element; it's
  * position gets returned with error (construction can be resumed via the first
  * optional paramenter of the `group_cnstr` function).
- * Group destruction must not fail; all exceptions are fatal.
+ * Group destruction must not fail and has to be called when done.
+ * All exceptions are fatal.
  * `init` and `cycle` methods are provided in order to create the fist and the
  * next batch of elements, destructors are called and errors forwarded if any.
  *
