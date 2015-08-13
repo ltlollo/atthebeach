@@ -17,13 +17,13 @@ int Module::load(char* path) {
     }
     dsize = size;
     rewind(infile);
-    data = (int8_t*)malloc((dsize+1+sizeof(void*))*sizeof(int8_t));
-    *(data+dsize) = 0;
-    *((void**)(data+dsize+1)) = nullptr;
+    data = (int8_t*)malloc((dsize+1)*sizeof(int8_t)+sizeof(void*));
     if (data == nullptr) {
         perror("malloc");
         goto ERR;
     }
+    *(data+dsize) = 0;
+    *((void**)(data+dsize+1)) = nullptr;
     if (fread(data, dsize, 1, infile) != dsize) {
         perror("fread");
         goto ERR;
