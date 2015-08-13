@@ -49,7 +49,7 @@ NOINCR:
                 goto NOINCR;
             } break;
         case JGT:
-            if (mem.reg[mem.ip->dst].ll > mem.reg[mem.ip->dst].ll) {
+            if (mem.reg[mem.ip->dst].ill > mem.reg[mem.ip->dst].ill) {
                 mem.ip += mem.ip->ival;
                 goto NOINCR;
             } break;
@@ -59,7 +59,7 @@ NOINCR:
                 goto NOINCR;
             } break;
         case JLT:
-            if (mem.reg[mem.ip->dst].ll < mem.reg[mem.ip->dst].ll) {
+            if (mem.reg[mem.ip->dst].ill < mem.reg[mem.ip->dst].ill) {
                 mem.ip += mem.ip->ival;
                 goto NOINCR;
             } break;
@@ -68,56 +68,56 @@ NOINCR:
                 mem.ip += mem.ip->ival;
                 goto NOINCR;
             } break;
-        case ADD:   mem.reg[mem.ip->dst].ll  += mem.ip->ival;             break;
+        case ADD:   mem.reg[mem.ip->dst].ill += mem.ip->ival;             break;
         case ADDU:  mem.reg[mem.ip->dst].ull += mem.ip->ival;             break;
-        case SUB:   mem.reg[mem.ip->dst].ll  -= mem.ip->ival;             break;
+        case SUB:   mem.reg[mem.ip->dst].ill -= mem.ip->ival;             break;
         case SUBU:  mem.reg[mem.ip->dst].ull -= mem.ip->ival;             break;
-        case MUL:   mem.reg[mem.ip->dst].ll  *= mem.ip->ival;             break;
+        case MUL:   mem.reg[mem.ip->dst].ill *= mem.ip->ival;             break;
         case MULU:  mem.reg[mem.ip->dst].ull *= mem.ip->ival;             break;
-        case DIV:   mem.reg[mem.ip->dst].ll  /= mem.ip->ival;             break;
+        case DIV:   mem.reg[mem.ip->dst].ill /= mem.ip->ival;             break;
         case DIVU:  mem.reg[mem.ip->dst].ull /= mem.ip->ival;             break;
-        case ADDI:  mem.reg[mem.ip->dst].ll  += mem.reg[mem.ip->src].ll;  break;
+        case ADDI:  mem.reg[mem.ip->dst].ill += mem.reg[mem.ip->src].ill; break;
         case ADDIU: mem.reg[mem.ip->dst].ull += mem.reg[mem.ip->src].ull; break;
-        case SUBI:  mem.reg[mem.ip->dst].ll  -= mem.reg[mem.ip->src].ll;  break;
+        case SUBI:  mem.reg[mem.ip->dst].ill -= mem.reg[mem.ip->src].ill; break;
         case SUBIU: mem.reg[mem.ip->dst].ull -= mem.reg[mem.ip->src].ull; break;
-        case MULI:  mem.reg[mem.ip->dst].ll  *= mem.reg[mem.ip->src].ll;  break;
+        case MULI:  mem.reg[mem.ip->dst].ill *= mem.reg[mem.ip->src].ill; break;
         case MULIU: mem.reg[mem.ip->dst].ull *= mem.reg[mem.ip->src].ull; break;
-        case DIVI:  mem.reg[mem.ip->dst].ll  /= mem.reg[mem.ip->src].ll;  break;
+        case DIVI:  mem.reg[mem.ip->dst].ill /= mem.reg[mem.ip->src].ill; break;
         case DIVIU: mem.reg[mem.ip->dst].ull /= mem.reg[mem.ip->src].ull; break;
         case XORI:  mem.reg[mem.ip->dst].ull ^= mem.reg[mem.ip->src].ull; break;
         case ANDI:  mem.reg[mem.ip->dst].ull &= mem.reg[mem.ip->src].ull; break;
         case ORI:   mem.reg[mem.ip->dst].ull |= mem.reg[mem.ip->src].ull; break;
         case NOT:   mem.reg[mem.ip->dst].ull =! mem.reg[mem.ip->dst].ull; break;
-        case XOR:   mem.reg[mem.ip->dst].ll  ^= mem.ip->ival;             break;
+        case XOR:   mem.reg[mem.ip->dst].ill ^= mem.ip->ival;             break;
         case XORU:  mem.reg[mem.ip->dst].ull ^= mem.ip->uval;             break;
-        case AND:   mem.reg[mem.ip->dst].ll  &= mem.ip->ival;             break;
+        case AND:   mem.reg[mem.ip->dst].ill &= mem.ip->ival;             break;
         case ANDU:  mem.reg[mem.ip->dst].ull &= mem.ip->uval;             break;
-        case OR:    mem.reg[mem.ip->dst].ll  |= mem.ip->ival;             break;
+        case OR:    mem.reg[mem.ip->dst].ill |= mem.ip->ival;             break;
         case ORU:   mem.reg[mem.ip->dst].ull |= mem.ip->uval;             break;
-        case LS:    mem.reg[mem.ip->dst].ll  <<= mem.ip->nshift;          break;
+        case LS:    mem.reg[mem.ip->dst].ill <<= mem.ip->nshift;          break;
         case LSU:   mem.reg[mem.ip->dst].ull <<= mem.ip->nshift;          break;
-        case RS:    mem.reg[mem.ip->dst].ll  >>= mem.ip->nshift;          break;
+        case RS:    mem.reg[mem.ip->dst].ill >>= mem.ip->nshift;          break;
         case RSU:   mem.reg[mem.ip->dst].ull >>= mem.ip->nshift;          break;
         case CSR:
             switch(mem.ip->ss) {
-            case 0: mem.reg[mem.ip->dst].ll = *(int8_t *)(mem.sp+mem.ip->off);
+            case 0: mem.reg[mem.ip->dst].ill = *(int8_t *)(mem.sp+mem.ip->boff);
                 break;
-            case 1: mem.reg[mem.ip->dst].ll = *(int16_t*)(mem.sp+mem.ip->off);
+            case 1: mem.reg[mem.ip->dst].ill = *(int16_t*)(mem.sp+mem.ip->boff);
                 break;
-            case 2: mem.reg[mem.ip->dst].ll = *(int32_t*)(mem.sp+mem.ip->off);
+            case 2: mem.reg[mem.ip->dst].ill = *(int32_t*)(mem.sp+mem.ip->boff);
                 break;
-            case 3: mem.reg[mem.ip->dst].ll = *(int64_t*)(mem.sp+mem.ip->off);
+            case 3: mem.reg[mem.ip->dst].ill = *(int64_t*)(mem.sp+mem.ip->boff);
                 break;
             } break;
         case CSRU:
             switch(mem.ip->ss) {
-            case 0: mem.reg[mem.ip->dst].ull = *(uint8_t *)(mem.sp+mem.ip->off);
+            case 0: mem.reg[mem.ip->dst].ull = *(uint8_t *)(mem.sp+mem.ip->boff);
                 break;
-            case 1: mem.reg[mem.ip->dst].ull = *(uint16_t*)(mem.sp+mem.ip->off);
+            case 1: mem.reg[mem.ip->dst].ull = *(uint16_t*)(mem.sp+mem.ip->boff);
                 break;
-            case 2: mem.reg[mem.ip->dst].ull = *(uint32_t*)(mem.sp+mem.ip->off);
+            case 2: mem.reg[mem.ip->dst].ull = *(uint32_t*)(mem.sp+mem.ip->boff);
                 break;
-            case 3: mem.reg[mem.ip->dst].ull = *(uint64_t*)(mem.sp+mem.ip->off);
+            case 3: mem.reg[mem.ip->dst].ull = *(uint64_t*)(mem.sp+mem.ip->boff);
                 break;
             } break;
         case CRS:
@@ -147,25 +147,25 @@ NOINCR:
         case MV:
             stack_size -= mem.ip->ss;
             switch(mem.ip->ss) {
-            case 0: mem.reg[mem.ip->dst].ll = *(int8_t *)(mem.sp+stack_size);
+            case 0: mem.reg[mem.ip->dst].ill = *(int8_t *)(mem.sp+stack_size);
                 break;
-            case 1: mem.reg[mem.ip->dst].ll = *(int16_t*)(mem.sp+stack_size);
+            case 1: mem.reg[mem.ip->dst].ill = *(int16_t*)(mem.sp+stack_size);
                 break;
-            case 2: mem.reg[mem.ip->dst].ll = *(int32_t*)(mem.sp+stack_size);
+            case 2: mem.reg[mem.ip->dst].ill = *(int32_t*)(mem.sp+stack_size);
                 break;
-            case 3: mem.reg[mem.ip->dst].ll = *(int64_t*)(mem.sp+stack_size);
+            case 3: mem.reg[mem.ip->dst].ill = *(int64_t*)(mem.sp+stack_size);
                 break;
             } break;
         case MVU:
             stack_size -= mem.ip->ss;
             switch(mem.ip->ss) {
-            case 0: mem.reg[mem.ip->dst].ll = *(int8_t *)(mem.sp+stack_size);
+            case 0: mem.reg[mem.ip->dst].ill = *(int8_t *)(mem.sp+stack_size);
                 break;
-            case 1: mem.reg[mem.ip->dst].ll = *(int16_t*)(mem.sp+stack_size);
+            case 1: mem.reg[mem.ip->dst].ill = *(int16_t*)(mem.sp+stack_size);
                 break;
-            case 2: mem.reg[mem.ip->dst].ll = *(int32_t*)(mem.sp+stack_size);
+            case 2: mem.reg[mem.ip->dst].ill = *(int32_t*)(mem.sp+stack_size);
                 break;
-            case 3: mem.reg[mem.ip->dst].ll = *(int64_t*)(mem.sp+stack_size);
+            case 3: mem.reg[mem.ip->dst].ill = *(int64_t*)(mem.sp+stack_size);
                 break;
             } break;
         case BCP:

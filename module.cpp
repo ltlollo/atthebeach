@@ -28,6 +28,10 @@ int Module::load(char* path) {
         perror("fread");
         goto ERR;
     }
+    if (dsize < sizeof(int8_t)+2*sizeof(void*)+sizeof(Instr)) {
+        fprintf(stderr, "unsipported format");
+    }
+    ver = *(uint8_t*)data++;
     return 0;
 ERR:
     fclose(infile);

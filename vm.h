@@ -26,7 +26,7 @@ struct Instr {
         // indirect ops
         struct { uint32_t :OSZ, dst :RSZ, src  :RSZ; };
         // copy stack <=> reg
-        struct { uint32_t :OSZ, :RSZ, ss :SSZ; int32_t off  :ISZ-OSZ-RSZ-SSZ; };
+        struct { uint32_t :OSZ, :RSZ, ss :SSZ; int32_t boff :ISZ-OSZ-RSZ-SSZ; };
         struct { uint32_t :OSZ, :RSZ, bs :BSZ; int32_t soff :ISZ-OSZ-RSZ-BSZ; };
         // indirect put
         struct { uint32_t :OSZ,     :RSZ,      :RSZ, from :RSZ; };
@@ -53,10 +53,10 @@ enum Opcode : uint8_t {
 struct Reg {
     union {
         void*    ptr;
-        int8_t   s;
+        int8_t   is;
         int16_t  i;
-        int32_t  l;
-        int64_t  ll;
+        int32_t  il;
+        int64_t  ill;
         uint8_t  us;
         uint16_t u;
         uint32_t ul;

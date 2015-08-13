@@ -21,6 +21,8 @@ struct Module {
     Offset* dnload_funptr_region;
     Offset* dnload_symptr_region;
 
+    uint8_t ver;
+
     int load(char* path);
     void unload();
     void populate_regions();
