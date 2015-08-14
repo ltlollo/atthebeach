@@ -17,7 +17,7 @@ int Module::load(char* path) {
     }
     dsize = size;
     rewind(infile);
-    data = (int8_t*)malloc((dsize+1+sizeof(uint64_t))*sizeof(int8_t));
+    data = (int8_t*)malloc((dsize+1)*sizeof(int8_t)+sizeof(uint64_t));
     if (data == nullptr) {
         perror("malloc");
         goto ERR;
