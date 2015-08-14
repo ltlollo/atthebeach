@@ -17,18 +17,18 @@ int Module::load(char* path) {
     }
     dsize = size;
     rewind(infile);
-    data = (int8_t*)malloc((dsize+1)*sizeof(int8_t)+sizeof(void*));
+    data = (int8_t*)malloc((dsize+1+sizeof(uint64_t))*sizeof(int8_t));
     if (data == nullptr) {
         perror("malloc");
         goto ERR;
     }
     *(data+dsize) = 0;
-    *((void**)(data+dsize+1)) = nullptr;
+    *((uint64_t*)(data+dsize+1)) = 0;
     if (fread(data, dsize, 1, infile) != dsize) {
         perror("fread");
         goto ERR;
     }
-    if (dsize < sizeof(int8_t)+2*sizeof(void*)+sizeof(Instr)) {
+    if (dsize < sizeof(int8_t)+2*sizeof(uint64_t)+sizeof(Instr)) {
         fprintf(stderr, "unsupported format");
     }
     ver = *(uint8_t*)data++;
@@ -57,7 +57,15 @@ void Module::populate_regions() {
         fprintf(stderr, "missing function region\n");
         exit(EXIT_FAILURE);
     }
-    dnload_funptr_region = region++;
+    dnload_funptr_region = region;
+    while (*(uint64_t*)region != 0) {
+        ++region;
+    }
+    if (region >= (Offset*)data+dsize) {
+        fprintf(stderr, "missing end of function region\n");
+        exit(EXIT_FAILURE);
+    }
+    (region++)->iptr = nullptr;
     if (region >= (Offset*)data+dsize) {
         fprintf(stderr, "missing symbol region\n");
         exit(EXIT_FAILURE);
@@ -70,7 +78,16 @@ void Module::populate_regions() {
         fprintf(stderr, "missing symbol region\n");
         exit(EXIT_FAILURE);
     }
-    dnload_funptr_region = region++;
+    dnload_funptr_region = region;
+
+    while (*(uint64_t*)region != 0) {
+        ++region;
+    }
+    if (region >= (Offset*)data+dsize) {
+        fprintf(stderr, "missing end of symbol region\n");
+        exit(EXIT_FAILURE);
+    }
+    (region++)->iptr = nullptr;
     if (region >= (Offset*)data+dsize) {
         fprintf(stderr, "missing main text region\n");
         exit(EXIT_FAILURE);

@@ -1,6 +1,5 @@
 #include "vm.h"
 
-
 Machine::Machine(size_t size) {
     mem.stack = (int8_t*)malloc(sizeof(int8_t)*size);
     bzero(mem.stack, size);
@@ -29,14 +28,12 @@ NOINCR:
             stack_size = *((uint32_t*)(mem.sp+4));
             mem.sp -= stack_size;
             // fall through
-        case CALL:
-            mem.sp += stack_size;
+        case CALL: mem.sp += stack_size;
             *((Instr**)(mem.sp)) = mem.ip;
             *((uint32_t*)(mem.sp+4)) = stack_size;
             stack_size = 0;
             goto NOINCR;
-        case JMP:
-            mem.ip += mem.ip->rest;
+        case JMP: mem.ip += mem.ip->rest;
             goto NOINCR;
         case JEQ:
             if (mem.reg[mem.ip->dst].ull == 0) {
@@ -76,6 +73,8 @@ NOINCR:
         case MULU:  mem.reg[mem.ip->dst].ull *= mem.ip->ival;             break;
         case DIV:   mem.reg[mem.ip->dst].ill /= mem.ip->ival;             break;
         case DIVU:  mem.reg[mem.ip->dst].ull /= mem.ip->ival;             break;
+        case MOD:   mem.reg[mem.ip->dst].ill %= mem.ip->ival;             break;
+        case MODU:  mem.reg[mem.ip->dst].ull %= mem.ip->ival;             break;
         case ADDI:  mem.reg[mem.ip->dst].ill += mem.reg[mem.ip->src].ill; break;
         case ADDIU: mem.reg[mem.ip->dst].ull += mem.reg[mem.ip->src].ull; break;
         case SUBI:  mem.reg[mem.ip->dst].ill -= mem.reg[mem.ip->src].ill; break;
@@ -84,6 +83,8 @@ NOINCR:
         case MULIU: mem.reg[mem.ip->dst].ull *= mem.reg[mem.ip->src].ull; break;
         case DIVI:  mem.reg[mem.ip->dst].ill /= mem.reg[mem.ip->src].ill; break;
         case DIVIU: mem.reg[mem.ip->dst].ull /= mem.reg[mem.ip->src].ull; break;
+        case MODI:  mem.reg[mem.ip->dst].ill %= mem.reg[mem.ip->src].ill; break;
+        case MODIU: mem.reg[mem.ip->dst].ull %= mem.reg[mem.ip->src].ull; break;
         case XORI:  mem.reg[mem.ip->dst].ull ^= mem.reg[mem.ip->src].ull; break;
         case ANDI:  mem.reg[mem.ip->dst].ull &= mem.reg[mem.ip->src].ull; break;
         case ORI:   mem.reg[mem.ip->dst].ull |= mem.reg[mem.ip->src].ull; break;
@@ -144,8 +145,7 @@ NOINCR:
             case 3: *(uint64_t*)(mem.reg[mem.ip->dst].ptr) =
                         mem.reg[mem.ip->from].ull; break;
             } break;
-        case MV:
-            stack_size -= mem.ip->ss;
+        case MV: stack_size -= mem.ip->ss;
             switch(mem.ip->ss) {
             case 0: mem.reg[mem.ip->dst].ill = *(int8_t *)(mem.sp+stack_size);
                 break;
@@ -156,8 +156,7 @@ NOINCR:
             case 3: mem.reg[mem.ip->dst].ill = *(int64_t*)(mem.sp+stack_size);
                 break;
             } break;
-        case MVU:
-            stack_size -= mem.ip->ss;
+        case MVU: stack_size -= mem.ip->ss;
             switch(mem.ip->ss) {
             case 0: mem.reg[mem.ip->dst].ill = *(int8_t *)(mem.sp+stack_size);
                 break;
@@ -171,6 +170,9 @@ NOINCR:
         case BCP:
             memcpy(mem.reg[mem.ip->dst].ptr, mem.sp+mem.ip->soff, mem.ip->bs+1);
             break;
+        case RES: stack_size += mem.ip->rest; break;
+        case FRE: stack_size -= mem.ip->rest; break;
+        case NOP: break;
         default:
             fprintf(stderr, "%c: unknown opcode\n", mem.ip->op);
             exit(EXIT_FAILURE);

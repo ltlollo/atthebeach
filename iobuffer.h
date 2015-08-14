@@ -9,7 +9,7 @@
  * Errors must be reported returing a non zero value in the group construtor;
  * if they occur, contruction gets stopped at the current element; it's
  * position gets returned with error (construction can be resumed via the first
- * optional paramenter of the `group_cnstr` function).
+ * optional paramenter of the `group_cnstr` member function).
  * Group destruction must not fail and has to be called when done.
  * All exceptions are fatal.
  * `init` and `cycle` methods are provided in order to create the fist and the
