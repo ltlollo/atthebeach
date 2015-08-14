@@ -66,10 +66,15 @@ struct Reg {
 
 struct Machine {
     struct {
-    Reg reg[32];
-    Instr* ip;
-    int8_t* sp;
-    int8_t* stack;
+        union {
+            struct { Reg reg[32]; };
+            struct {
+                Reg ureg[30];
+                Instr* ip;
+                int8_t* sp;
+            };
+        };
+        int8_t* stack;
     } mem;
     Machine(size_t size);
     ~Machine();
