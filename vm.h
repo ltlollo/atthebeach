@@ -76,7 +76,7 @@ struct Machine {
         };
         int8_t* stack;
     } mem;
-    Machine(size_t size);
+    Machine(size_t size, const bool dirty = true);
     ~Machine();
     int8_t exec(Instr* main_text, int entry = 0);
 };

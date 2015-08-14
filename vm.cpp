@@ -1,8 +1,10 @@
 #include "vm.h"
 
-Machine::Machine(size_t size) {
-    mem.stack = (int8_t*)malloc(sizeof(int8_t)*size);
-    bzero(mem.stack, size);
+Machine::Machine(size_t size, const bool dirty) {
+    mem.stack = (int8_t*)malloc(sizeof(int8_t)*(size+1));
+    if (!dirty) {
+        bzero(mem.stack, size);
+    }
     if (mem.stack == nullptr) {
         perror("malloc");
         exit(EXIT_FAILURE);
