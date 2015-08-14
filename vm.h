@@ -85,5 +85,6 @@ static_assert(sizeof(Reg) == 8, "Reg must be 64b");
 static_assert(sizeof(Instr) == 4, "Instr must be 32b");
 static_assert(sizeof(int8_t) == 1, "int8_t must be 8b");
 static_assert(sizeof(void*) == 8, "ptr must be 64b");
+static_assert(sizeof(Machine) == 33*sizeof(void*), "Machine must be 33 ptrs");
 
 #endif // VM_H
