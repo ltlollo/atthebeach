@@ -22,7 +22,8 @@
 struct Instr {
     union {
         // jmp
-        struct { uint32_t op :OSZ, rest :ISZ-OSZ; };
+        struct { uint32_t op :OSZ,         urest :ISZ-OSZ; };
+        struct { uint32_t    :OSZ; int32_t irest :ISZ-OSZ; };
         // indirect ops
         struct { uint32_t :OSZ, dst :RSZ, src  :RSZ; };
         // copy stack <=> reg
@@ -41,13 +42,13 @@ struct Instr {
 };
 
 enum Opcode : uint8_t {
-    RET = 0, CALL, NOP,
+    RET = 0, CALL, CALLI, NOP,
     JMP, JEQ, JNE, JGT, JLT, JGTU, JLTU,
     ADD, SUB, DIV, MUL, ADDU, SUBU, DIVU, MULU, MOD, MODU,
     ADDI, SUBI, DIVI, MULI, ADDIU, SUBIU, DIVIU, MULIU, MODI, MODIU,
     XOR, AND, OR, XORU, ANDU, ORU, XORI, ANDI, ORI, NOT,
     LS, LSU, RS, RSU,
-    CSR, CSRU, CRS, PUTI, MV, MVU, BCP, RES, FRE
+    CSR, CSRU, CRS, PUTI, MV, MVU, BCP, CST
 };
 
 struct Reg {
@@ -66,14 +67,9 @@ struct Reg {
 
 struct Machine {
     struct {
-        union {
-            struct { Reg reg[32]; };
-            struct {
-                Reg ureg[30];
-                Instr* ip;
-                int8_t* sp;
-            };
-        };
+        Reg reg[32];
+        Instr* ip;
+        int8_t* sp;
         int8_t* stack;
     } mem;
     Machine(size_t size, const bool dirty = true);
@@ -85,6 +81,6 @@ static_assert(sizeof(Reg) == 8, "Reg must be 64b");
 static_assert(sizeof(Instr) == 4, "Instr must be 32b");
 static_assert(sizeof(int8_t) == 1, "int8_t must be 8b");
 static_assert(sizeof(void*) == 8, "ptr must be 64b");
-static_assert(sizeof(Machine) == 33*sizeof(void*), "Machine must be 33 ptrs");
+static_assert(sizeof(Machine) == 35*sizeof(void*), "Machine must be 33 ptrs");
 
 #endif // VM_H

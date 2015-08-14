@@ -34,8 +34,15 @@ NOINCR:
             *((Instr**)(mem.sp)) = mem.ip;
             *((uint32_t*)(mem.sp+4)) = stack_size;
             stack_size = 0;
+            mem.ip = (Instr*)mem.reg[mem.ip->dst].ptr;
             goto NOINCR;
-        case JMP: mem.ip += mem.ip->rest;
+        case CALLI: mem.sp += stack_size;
+            *((Instr**)(mem.sp)) = mem.ip;
+            *((uint32_t*)(mem.sp+4)) = stack_size;
+            stack_size = 0;
+            mem.ip = (Instr*)(mem.sp+mem.ip->urest);
+            goto NOINCR;
+        case JMP: mem.ip += mem.ip->irest;
             goto NOINCR;
         case JEQ:
             if (mem.reg[mem.ip->dst].ull == 0) {
@@ -160,20 +167,19 @@ NOINCR:
             } break;
         case MVU: stack_size -= mem.ip->ss;
             switch(mem.ip->ss) {
-            case 0: mem.reg[mem.ip->dst].ill = *(int8_t *)(mem.sp+stack_size);
+            case 0: mem.reg[mem.ip->dst].ull = *(uint8_t *)(mem.sp+stack_size);
                 break;
-            case 1: mem.reg[mem.ip->dst].ill = *(int16_t*)(mem.sp+stack_size);
+            case 1: mem.reg[mem.ip->dst].ull = *(uint16_t*)(mem.sp+stack_size);
                 break;
-            case 2: mem.reg[mem.ip->dst].ill = *(int32_t*)(mem.sp+stack_size);
+            case 2: mem.reg[mem.ip->dst].ull = *(uint32_t*)(mem.sp+stack_size);
                 break;
-            case 3: mem.reg[mem.ip->dst].ill = *(int64_t*)(mem.sp+stack_size);
+            case 3: mem.reg[mem.ip->dst].ull = *(uint64_t*)(mem.sp+stack_size);
                 break;
             } break;
         case BCP:
             memcpy(mem.reg[mem.ip->dst].ptr, mem.sp+mem.ip->soff, mem.ip->bs+1);
             break;
-        case RES: stack_size += mem.ip->rest; break;
-        case FRE: stack_size -= mem.ip->rest; break;
+        case CST: stack_size += mem.ip->irest; break;
         case NOP: break;
         default:
             fprintf(stderr, "%c: unknown opcode\n", mem.ip->op);
