@@ -1,6 +1,8 @@
 #ifndef IOBUFFER_H
 #define IOBUFFER_H
 
+#include <utility>
+
 /* Scope
  *
  * Given a configuration parameter `Conf<type, size>`, a group constructor
