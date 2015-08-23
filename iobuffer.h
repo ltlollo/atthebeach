@@ -18,16 +18,22 @@
  * next batch of elements, destructors are called and errors forwarded if any.
  *
  * Usage (code example)
- *
- * auto show = [](const auto& buf) { for (const auto& i: buf.storage) {
- *     cout << i << '\n';
- * }};
- * int s = 0;
- * auto buf = make_iobuffer(Conf<int, 1024>{}, [&](auto& val) { val = s++; });
- * buf.init();
- * show(buf);
- * buf.cycle();
- * show(buf);
+ * ```
+ *   auto show = [](const auto& buf) { for (const auto& i: buf.storage) {
+ *       cout << i << '\n';
+ *   }};
+ *   int s = 0;
+ *   auto buf = make_iobuffer(Conf<int, 1024>{}, [&](auto& val) { val = s++; });
+ *   buf.init();
+ *   show(buf);
+ *   buf.cycle();
+ *   show(buf);
+ * ```
+ * Note: This version uses the type in the Conf instead of infering it via
+ * funtion traits. The main advantage of this approach is to accept polimophic/
+ * overloaded lambdas(auto& ...). The other approach would allow to not specify
+ * the type in Conf, and to use T* as proxy type instead of just T&. But this
+ * version is more composable.
  */
 
 template<typename T, std::size_t N>
@@ -148,15 +154,15 @@ struct IOBuffer<Cfg, Cn, void, void> {
     }
 };
 
-template<typename C, typename F, typename G>
+template<typename C, typename F, typename G, typename P = typename C::Type&>
 constexpr auto make_iobuffer(C, F f, G g) noexcept {
-    using Ret = decltype(f(std::declval<typename C::Type&>()));
+    using Ret = decltype(f(std::declval<P>()));
     return IOBuffer<C, F, G, Ret>{f, g};
 }
 
-template<typename C, typename F>
+template<typename C, typename F, typename P = typename C::Type&>
 constexpr auto make_iobuffer(C, F f) noexcept {
-    using Ret = decltype(f(std::declval<typename C::Type&>()));
+    using Ret = decltype(f(std::declval<P>()));
     return IOBuffer<C, F, void, Ret>{f};
 }
 
